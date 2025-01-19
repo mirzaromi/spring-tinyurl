@@ -6,6 +6,7 @@ import org.mirza.tinyurl.entity.Url;
 import org.mirza.tinyurl.exception.NotFound;
 import org.mirza.tinyurl.repository.UrlRepository;
 import org.mirza.tinyurl.util.Base62Encoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,12 +15,16 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @Slf4j
 public class UrlService {
-    private final UrlRepository urlRepository;
+
+    public static final String PROTOCOL = "http://";
+
+    @Autowired
+    UrlRepository urlRepository;
 
     public String generateEncodedUrl(final String longUrl) {
         // generate short url
         long id = System.currentTimeMillis();
-        String shortUrl = Base62Encoder.encode(id);
+        String shortUrl = PROTOCOL + Base62Encoder.encode(id);
 
         // set expiration to one year later
         LocalDateTime now = LocalDateTime.now();
