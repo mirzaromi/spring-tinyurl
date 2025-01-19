@@ -18,8 +18,7 @@ public class UrlService {
 
     public static final String PROTOCOL = "http://";
 
-    @Autowired
-    UrlRepository urlRepository;
+    private final UrlRepository urlRepository;
 
     public String generateEncodedUrl(final String longUrl) {
         // generate short url

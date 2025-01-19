@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UrlController {
 
-    @Autowired
-    UrlService urlService;
+    private final UrlService urlService;
 
     @PostMapping("shorten")
     public ResponseEntity<BaseResponse> shortenUrl(String longUrl) {
