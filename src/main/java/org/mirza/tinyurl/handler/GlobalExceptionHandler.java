@@ -1,6 +1,7 @@
 package org.mirza.tinyurl.handler;
 
 import org.mirza.tinyurl.dto.BaseResponse;
+import org.mirza.tinyurl.exception.GlobalException;
 import org.mirza.tinyurl.exception.NotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,5 +29,16 @@ public class GlobalExceptionHandler {
         response.setMessage(ex.getMessage());
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    // Handle GlobalException
+    @ExceptionHandler(GlobalException.class)
+    public ResponseEntity<BaseResponse<Object>> handleGlobalException(
+            GlobalException ex) {
+        BaseResponse<Object> response = new BaseResponse<>();
+        response.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        response.setMessage(ex.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -1,5 +1,8 @@
 package org.mirza.tinyurl.controller;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.mirza.tinyurl.dto.BaseResponse;
 import org.mirza.tinyurl.service.UrlService;
@@ -17,7 +20,7 @@ public class UrlController {
     private final UrlService urlService;
 
     @PostMapping("shorten")
-    public ResponseEntity<BaseResponse<String>> shortenUrl(String longUrl) {
+    public ResponseEntity<BaseResponse<String>> shortenUrl(@NotBlank String longUrl) {
 
         String shortUrl = urlService.generateEncodedUrl(longUrl);
 
