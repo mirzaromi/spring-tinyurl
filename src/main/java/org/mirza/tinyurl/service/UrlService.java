@@ -16,14 +16,12 @@ import java.time.LocalDateTime;
 @Slf4j
 public class UrlService {
 
-    public static final String PROTOCOL = "http://";
-
     private final UrlRepository urlRepository;
 
     public String generateEncodedUrl(final String longUrl) {
         // generate short url
         long id = System.currentTimeMillis();
-        String shortUrl = PROTOCOL + Base62Encoder.encode(id);
+        String shortUrl = Base62Encoder.encode(id);
 
         // set expiration to one year later
         LocalDateTime now = LocalDateTime.now();

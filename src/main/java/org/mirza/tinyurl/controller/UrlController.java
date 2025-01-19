@@ -6,10 +6,8 @@ import org.mirza.tinyurl.service.UrlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("/url-shortener")
@@ -19,7 +17,7 @@ public class UrlController {
     private final UrlService urlService;
 
     @PostMapping("shorten")
-    public ResponseEntity<BaseResponse> shortenUrl(String longUrl) {
+    public ResponseEntity<BaseResponse<String>> shortenUrl(String longUrl) {
 
         String shortUrl = urlService.generateEncodedUrl(longUrl);
 
@@ -32,7 +30,7 @@ public class UrlController {
     }
 
     @GetMapping("/get-long-url")
-    public ResponseEntity<BaseResponse> getLongUrl(String shortUrl) {
+    public ResponseEntity<BaseResponse<String>> getLongUrl(String shortUrl) {
         String longUrl = urlService.getLongUrl(shortUrl);
 
         BaseResponse<String> response = new BaseResponse<>();
@@ -41,5 +39,13 @@ public class UrlController {
         response.setData(longUrl);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/redirect/{shortUrl}")
+    public RedirectView getRedirect(@PathVariable String shortUrl) {
+        // get long url
+        String longUrl = urlService.getLongUrl(shortUrl);
+
+        return new RedirectView(longUrl);
     }
 }
