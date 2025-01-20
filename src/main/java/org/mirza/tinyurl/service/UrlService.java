@@ -52,6 +52,12 @@ public class UrlService {
         Url url = urlRepository.findByShortUrl(shortUrl)
                 .orElseThrow(() -> new NotFound("Url not found"));
 
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isAfter(url.getExpiresAt())) {
+            throw new GlobalException("Url is expired");
+        }
+
+        log.info("get long url: {}", url);
         return url.getLongUrl();
     }
 
