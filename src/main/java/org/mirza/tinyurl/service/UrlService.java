@@ -7,6 +7,8 @@ import org.mirza.tinyurl.exception.GlobalException;
 import org.mirza.tinyurl.exception.NotFound;
 import org.mirza.tinyurl.repository.UrlRepository;
 import org.mirza.tinyurl.util.Base62Encoder;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,6 +21,7 @@ public class UrlService {
     private final UrlRepository urlRepository;
     private final UrlValidationService urlValidationService;
 
+    @CachePut(value = "tinyUrlCache")
     public String generateEncodedUrl(final String longUrl) {
 
         // check if url exist
@@ -48,6 +51,7 @@ public class UrlService {
         return shortUrl;
     }
 
+    @Cacheable(value = {"tinyUrlCache"})
     public String getLongUrl(final String shortUrl) {
         Url url = urlRepository.findByShortUrl(shortUrl)
                 .orElseThrow(() -> new NotFound("Url not found"));
